@@ -1,11 +1,11 @@
 import sys
 
 #File input
-file_text = input("enter the name to text file: ")
+file_text = raw_input("enter the name to text file: ")
 fileInput = open(file_text, "r")
 
 #File output
-file_fasta = input("Enter the name of fasta file: ")
+file_fasta = raw_input("Enter the name of fasta file: ")
 fileOutput = open(file_fasta, "w")
 
 #Seq count
