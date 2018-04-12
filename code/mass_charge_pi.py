@@ -11,6 +11,7 @@
 ########################################################################################
 
 from Bio import SeqIO
+from Bio.SeqUtils.ProtParam import ProteinAnalysis
 import pandas as pd
 import os
 
@@ -30,39 +31,6 @@ amino_acid=['G','A','V','L','I','P','F','Y','W','S','T','C','M','N','Q','K','R',
 
 pKa = {'D': 3.9, 'E': 4.3, 'H': 6.1, 'C': 8.3, 'Y': 10.1, 'K': 10.5, 'R': 12, 'N-term': 8, 'C-term': 3.1}
 charges = {'D': -1, 'E': -1, 'H': +1, 'C': -1, 'Y': -1, 'K': 1, 'R': 1, 'N-term': 1, 'C-term': -1}
-
-
-def calculateAminoAcidCharge(amino_acid, pH):
-    ratio = 1.0 / float(1 + 10 ** (pH - pKa[amino_acid]))
-
-    if charges[amino_acid] == 1:
-        return ratio
-    else:
-        return ratio - 1
-
-
-def calculateProteinCharge(sequence, pH):
-    protein_charge = calculateAminoAcidCharge('N-term', pH) + calculateAminoAcidCharge('C-term', pH)
-
-    for amino_acid in pKa.keys():
-        protein_charge += sequence.seq.count(amino_acid) * calculateAminoAcidCharge(amino_acid, pH)
-
-    return protein_charge
-
-
-def calculateIsoelectricPoint(sequence):
-    min_pH, max_pH = 3, 13
-
-    while True:
-        mid_pH = 0.5 * (max_pH + min_pH)
-        protein_charge = calculateProteinCharge(sequence, mid_pH)
-
-        if protein_charge > 0.5:
-            min_pH = mid_pH
-        elif protein_charge < -0.5:
-            max_pH = mid_pH
-        else:
-            return mid_pH
 
 seq = {}
 file_fa = raw_input("enter the name of file to be parsed: ")
@@ -84,8 +52,9 @@ for seq_record in SeqIO.parse(file_fa, "fasta"):
             H+=hydrophobicity[seq_record.seq[i]]
         if seq_record.seq[i] in mass.keys():
             M+=mass[seq_record.seq[i]]
-        pi=calculateIsoelectricPoint(seq_record)
-
+        #pi=calculateIsoelectricPoint(seq_record)
+        seq_iso = ProteinAnalysis(seq_record.seq[i])
+        pi=seq_iso.isoelectric_point()
 
     if seq.has_key(str_charge):
         seq[str_charge][str(seq_record.seq)] = C
