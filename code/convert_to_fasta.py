@@ -28,3 +28,6 @@ print ("Done.")
 #Close the input and output file
 fileInput.close()
 fileOutput.close()
+
+#/media/adalove/WorkDrive/M.Tech/Sem2/BDMH/Project/Prediction_Antifungal_Peptide/data/txt/ds2/train/neg_train_ds2.txt
+#/media/adalove/WorkDrive/M.Tech/Sem2/BDMH/Project/Prediction_Antifungal_Peptide/data/fasta/ds2/train/neg_ds2.fa

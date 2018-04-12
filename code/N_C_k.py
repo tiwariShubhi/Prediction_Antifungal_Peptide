@@ -1,4 +1,5 @@
-file_to_read = input("enter txt file to read: ")
+
+file_to_read = raw_input("enter txt file to read: ")
 #file_to_write = input("enter csv file to write: ")
 with open(file_to_read) as f:
     data = f.readlines()
@@ -18,8 +19,8 @@ for each in data:
             for m2 in str:
                 if m2 == temp:
                     count = count + 1
-            composition = (count / k) * 100
-            print("%.2f" % composition, end=",")
-        print()
+            composition = (float(count) / float(k)) * 100
+            print("%.2f" % composition) ,
+        #print()
 print(C5)
 

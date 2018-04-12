@@ -1,4 +1,4 @@
-file_to_read = input("enter txt file to read: ")
+file_to_read = raw_input("enter txt file to read: ")
 #file_to_write = input("enter csv file to write: ")
 with open(file_to_read) as f:
     data = f.readlines()
@@ -8,6 +8,7 @@ comp=[]
 aa= list('ACDEFGHIKLMNPQRSTVWY')
 k=10 #k=5 for N5 , 10 for N10 and 15 for N15
 #output = open(file_to_write,'w')
+seq={}
 for each in data:
     i=0
     if(len(each)>k ):
@@ -19,7 +20,8 @@ for each in data:
                 if m2 == temp:
                     count = count + 1
             composition = (count / k) * 100
-            print("%.2f" % composition, end=",")
+            print("%.2f" % composition) ,
+
         print()
 print(N5)
 
