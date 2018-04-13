@@ -28,7 +28,7 @@ data = [line.rstrip('\n').rstrip('\r') for line in open(file_to_read)]
 C5=[]
 comp=[]
 aa= list('ACDEFGHIKLMNPQRSTVWY')
-k=5 #k=5 for C5 , 10 for C10 and 15 for C15
+k=15 #k=5 for C5 , 10 for C10 and 15 for C15
 #output = open(file_to_write,'w')
 seq = {}
 for each in data:
