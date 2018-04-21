@@ -176,7 +176,9 @@ ROC_j48_ex <- roc(predictor=as.numeric(pred_j48_ex),
                   levels=rev(levels(Exdata$Label)))
 
 #SMO-------------------------------------------------------------------------------------------------------------
-SMO(trainData[,predictors],trainData[,outcomeName],control = Weka_control(K =list("weka.classifiers.functions.supportVector.RBFKernel", G =2)))
+#model_smo <- SMO(trainData[,predictors],trainData[,outcomeName],control = Weka_control(K =list("weka.classifiers.functions.supportVector.RBFKernel", G =2)))
+model_smo <- SMO(trainData[,outcomeName]~.,trainData[,c(outcomeName,predictors)],control = Weka_control(K =list("weka.classifiers.functions.supportVector.RBFKernel", G =2)))
+Exdata <- read.csv(file=inExFile,header=TRUE,sep=",")
 
 
 #ELM-Neural Network-----------------------------------------------------------------------------------------------------------------------------
