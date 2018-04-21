@@ -12,6 +12,8 @@ library('pROC')
 library('RWeka')
 inFile<- readline(prompt="Enter data set file name : ")
 trainData <- read.csv(file=inFile,header=TRUE,sep=",",row.names = 1)
+inExFile<- readline(prompt="Enter external data set file name : ")
+Exdata <- read.csv(file=inExFile,header=TRUE,sep=",",row.names = 1)
 
 # splitting data into 80:20 for internal validation
 #set.seed(2005)
@@ -40,8 +42,7 @@ ROC_nb <- roc(predictor=as.numeric(pred_nb),
 
 
 #external validation
-inExFile<- readline(prompt="Enter external data set file name : ")
-Exdata <- read.csv(file=inExFile,header=TRUE,sep=",")
+
 pred_nb_ex<-predict.train(object=model_nb,Exdata[,predictors],type="raw",metric='Accuracy')
 table(pred_nb_ex)
 nb_cnfMat_ex <- confusionMatrix(pred_nb_ex,Exdata[,outcomeName])
@@ -78,8 +79,6 @@ ROC_rf <- roc(predictor=as.numeric(pred_rf),
 
 
 #external validation
-inExFile<- readline(prompt="Enter external data set file name : ")
-Exdata <- read.csv(file=inExFile,header=TRUE,sep=",")
 pred_rf_ex<-predict.train(object=model_rf,Exdata[,predictors],type="raw",metric='Accuracy')
 table(pred_rf_ex)
 rf_cnfMat_ex <- confusionMatrix(pred_rf_ex,Exdata[,outcomeName])
@@ -104,8 +103,6 @@ ROC_svm <- roc(predictor=as.numeric(pred_svm),
 
 
 #external validation
-inExFile<- readline(prompt="Enter external data set file name : ")
-Exdata <- read.csv(file=inExFile,header=TRUE,sep=",")
 pred_svm_ex<-predict.train(object=model_svm,Exdata[,predictors],type="raw",metric='Accuracy')
 table(pred_svm_ex)
 svm_cnfMat_ex <- confusionMatrix(pred_svm_ex,Exdata[,outcomeName])
@@ -134,8 +131,6 @@ ROC_svm_rbf <- roc(predictor=as.numeric(pred_svm_rbf),
 
 
 #external validation
-inExFile<- readline(prompt="Enter external data set file name : ")
-Exdata <- read.csv(file=inExFile,header=TRUE,sep=",")
 pred_svm_rbf_ex<-predict.train(object=model_svm_rbf,Exdata[,predictors],type="raw",metric='Accuracy')
 table(pred_svm_rbf_ex)
 svm_rbf_cnfMat_ex <- confusionMatrix(pred_svm_rbf_ex,Exdata[,outcomeName])
@@ -163,8 +158,6 @@ ROC_j48 <- roc(predictor=as.numeric(pred_j48),
 
 
 #external validation
-inExFile<- readline(prompt="Enter external data set file name : ")
-Exdata <- read.csv(file=inExFile,header=TRUE,sep=",")
 pred_j48_ex<-predict.train(object=model_j48,Exdata[,predictors],type="raw",metric='Accuracy')
 table(pred_j48_ex)
 j48_cnfMat_ex <- confusionMatrix(pred_j48_ex,Exdata[,outcomeName])
@@ -176,7 +169,7 @@ ROC_j48_ex <- roc(predictor=as.numeric(pred_j48_ex),
                   levels=rev(levels(Exdata$Label)))
 
 #SMO-------------------------------------------------------------------------------------------------------------
-SMO(trainData[,predictors],trainData[,outcomeName],control = Weka_control(K =list("weka.classifiers.functions.supportVector.RBFKernel", G =2)))
+model_smo<- SMO(trainData[,predictors],trainData[,outcomeName],control = Weka_control(K =list("weka.classifiers.functions.supportVector.RBFKernel", G =2)))
 
 
 #ELM-Neural Network-----------------------------------------------------------------------------------------------------------------------------
@@ -195,8 +188,6 @@ ROC_elm <- roc(predictor=as.numeric(pred_elm),
 
 
 #external validation
-inExFile<- readline(prompt="Enter external data set file name : ")
-Exdata <- read.csv(file=inExFile,header=TRUE,sep=",")
 pred_elm_ex<-predict.train(object=model_elm,Exdata[,predictors],type="raw",metric='Accuracy')
 table(pred_elm_ex)
 elm_cnfMat_ex <- confusionMatrix(pred_elm_ex,Exdata[,outcomeName])
@@ -228,8 +219,6 @@ ROC_ada <- roc(predictor=as.numeric(pred_ada),
 
 
 #external validation
-inExFile<- readline(prompt="Enter external data set file name : ")
-Exdata <- read.csv(file=inExFile,header=TRUE,sep=",")
 pred_ada_ex<-predict.train(object=model_ada,Exdata[,predictors],type="raw",metric='Accuracy')
 table(pred_elm_ex)
 ada_cnfMat_ex <- confusionMatrix(pred_ada_ex,Exdata[,outcomeName])
@@ -239,3 +228,32 @@ spe_ada_ex <- ada_cnfMat_ex$byClass["Specificity"]
 ROC_ada_ex <- roc(predictor=as.numeric(pred_ada_ex),
                   response=Exdata$Label,
                   levels=rev(levels(Exdata$Label)))
+
+#KNN------------------------------------------------------------------------------------------------------------------
+#SVM Radial--------------------------------------------------------------------------------------
+#grid_radial <- expand.grid(sigma = c(0.0005,0.001,0.01,0.05, 0.1, 0.5),
+#                           C = c(0.01, 0.05, 0.1, 0.25,
+#                                 1, 2,4,8))
+set.seed(3233)
+model_knn<-train(trainData[,predictors],trainData[,outcomeName],method='knn',trControl = train_ctrl,metric = 'Accuracy',tuneLength = 10)
+pred_knn<-predict.train(object=model_knn,trainData[,predictors],type="raw",metric='Accuracy')
+table(pred_knn)
+knn_cnfMat <- confusionMatrix(pred_knn,trainData[,outcomeName])
+acc_knn <- knn_cnfMat$overall["Accuracy"]
+sen_knn <- knn_cnfMat$byClass["Sensitivity"]
+spe_knn <- knn_cnfMat$byClass["Specificity"]
+ROC_knn <- roc(predictor=as.numeric(pred_knn),
+                   response=trainData$Label,
+                   levels=rev(levels(trainData$Label)))
+
+
+#external validation
+pred_knn_ex<-predict.train(object=model_knn,Exdata[,predictors],type="raw",metric='Accuracy')
+table(pred_knn_ex)
+knn_cnfMat_ex <- confusionMatrix(pred_knn_ex,Exdata[,outcomeName])
+acc_knn_ex <- knn_cnfMat_ex$overall["Accuracy"]
+sen_knn_ex <- knn_cnfMat_ex$byClass["Sensitivity"]
+spe_knn_ex <- knn_cnfMat_ex$byClass["Specificity"]
+ROC_knn_ex <- roc(predictor=as.numeric(pred_knn_ex),
+                      response=Exdata$Label,
+                      levels=rev(levels(Exdata$Label)))
