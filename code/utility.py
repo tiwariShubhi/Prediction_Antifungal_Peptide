@@ -3,8 +3,8 @@
 import subprocess
 
 #read a file name of train files
-masterFile = "/media/adalove/WorkDrive/M.Tech/Sem2/BDMH/Project/Prediction_Antifungal_Peptide/data/masterFile"
-rScriptName="/media/adalove/WorkDrive/M.Tech/Sem2/BDMH/Project/Prediction_Antifungal_Peptide/code/R_Scripts/testScriptSaving.R"
+masterFile = "/media/adalove/WorkDrive/M.Tech/Sem2/BDMH/Project/Prediction_Antifungal_Peptide/data/masterFile_shubhi"
+rScriptName="/media/adalove/WorkDrive/M.Tech/Sem2/BDMH/Project/Prediction_Antifungal_Peptide/code/R_Scripts/model_project_res.R"
 pathToResFiles = "/media/adalove/WorkDrive/M.Tech/Sem2/BDMH/Project/Prediction_Antifungal_Peptide/results/"
 #till /
 
