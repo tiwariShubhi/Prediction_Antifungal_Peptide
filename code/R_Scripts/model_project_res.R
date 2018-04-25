@@ -135,6 +135,14 @@ res
 
 
 
+s <- paste("",acc_rf_ex,sep=',')
+s <- paste(s,sen_rf_ex,sep=',')
+s <- paste(s,spe_rf_ex,sep=',')
+s <- paste(s,ROC_rf_ex$auc[1],sep=',')
+res <- paste(res,s,sep=',')
+res
+
+
 #SVM Linear-------------------------------------------------------------------------------
 model_svm<-train(trainData[,predictors],trainData[,outcomeName],method='svmLinear2',trControl = train_ctrl,metric = 'ROC')
 pred_svm<-predict.train(object=model_svm,trainData[,predictors],type="raw",metric='Accuracy')
