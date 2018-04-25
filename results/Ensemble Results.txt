@@ -1,0 +1,70 @@
+Call:
+summary.resamples(object = results)
+
+Models: svmRadial, rf, J48, AdaBoost.M1 
+Number of resamples: 25 
+
+These results are without parameter tuning
+Accuracy 
+                 Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA's
+svmRadial   0.8286938 0.8436831 0.8565310 0.8559962 0.8675214 0.8905579    0
+rf          0.8522484 0.8693790 0.8824786 0.8785101 0.8888889 0.9014989    0
+J48         0.7837259 0.8179872 0.8290598 0.8294486 0.8415418 0.8629550    0
+AdaBoost.M1 0.8265525 0.8522484 0.8672377 0.8607887 0.8717949 0.8905579    0
+
+Kappa 
+                Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA's
+svmRadial   0.657342 0.6873848 0.7130792 0.7119914 0.7350427 0.7811159    0
+rf          0.704471 0.7387544 0.7649573 0.7570181 0.7777778 0.8029753    0
+J48         0.567430 0.6359960 0.6581197 0.6588907 0.6830762 0.7258937    0
+AdaBoost.M1 0.653062 0.7044819 0.7344595 0.7215745 0.7435897 0.7811159    0
+
+
+Model correlation
+           svmRadial        rf       J48 AdaBoost.M1
+svmRadial   1.0000000 0.8156132 0.8316223   0.7276178
+rf          0.8156132 1.0000000 0.6725500   0.7629392
+J48         0.8316223 0.6725500 1.0000000   0.6148570
+AdaBoost.M1 0.7276178 0.7629392 0.6148570   1.0000000
+
+caretStack results :
+A rf ensemble of 2 base models: svmRadial, rf, J48, AdaBoost.M1
+
+Ensemble results:
+Random Forest 
+
+11680 samples
+    4 predictors
+    2 classes: 'neg', 'pos' 
+
+No pre-processing
+Resampling: Cross-Validated (5 fold, repeated 5 times) 
+Summary of sample sizes: 9344, 9344, 9344, 9344, 9344, 9344, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy   Kappa    
+  2     0.8750171  0.7500342
+  3     0.8730137  0.7460274
+  4     0.8719007  0.7438014
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was mtry = 2.	
+
+
+
+Results on External validation
+
+
+           svmRadial.neg svmRadial.pos    rf.neg    rf.pos  J48.neg  J48.pos AdaBoost.M1.neg AdaBoost.M1.pos
+neg vs. pos     0.9335152     0.9335152 0.9541456 0.9541456 0.845597 0.845597       0.9394669       0.9394669
+             ensemble
+neg vs. pos 0.9472196
+
+
+Next take adaboot and J48 together
+
+
+links:
+https://machinelearningmastery.com/machine-learning-ensembles-with-r/
+
+https://cran.r-project.org/web/packages/caretEnsemble/vignettes/caretEnsemble-intro.html

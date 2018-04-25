@@ -21,17 +21,17 @@ library('pROC')
 library('RWeka')
 
 # read all files as command line args
-args <- commandArgs(TRUE)
-#args
-inFile <- args[1]
-inExFile <- args[2]
-outputCsv <- args[3]
+# args <- commandArgs(TRUE)
+# #args
+# inFile <- args[1]
+# inExFile <- args[2]
+# outputCsv <- args[3]
+outputCsv <- "/media/adalove/WorkDrive/M.Tech/Sem2/BDMH/Project/Prediction_Antifungal_Peptide/results/res_main_n15_c15_bin2.csv"
 
 
-
-#inFile<- readline(prompt="Enter data set file name : ")
+inFile<- readline(prompt="Enter data set file name : ")
 trainData <- read.csv(file=inFile,header=TRUE,sep=",",row.names = 1)
-#inExFile<- readline(prompt="Enter external data set file name : ")
+inExFile<- readline(prompt="Enter external data set file name : ")
 Exdata <- read.csv(file=inExFile,header=TRUE,sep=",",row.names = 1)
 
 # splitting data into 80:20 for internal validation
@@ -89,7 +89,7 @@ res
 #Random forest-------------------------------------------------------------------------------
 tunegrid <- expand.grid(.mtry=c(1:15))#,.ntree = c(50,100,150,200,250,300,350,400,450,500,550,700,1000))
 modellist <- list()
-for (ntree in c(350)) {
+for (ntree in c(50,350)) {
   set.seed(7)
   fit <- train(trainData[,predictors],trainData[,outcomeName],method='rf',trControl = train_ctrl,metric = 'Accuracy',tuneGrid = tunegrid,tuneLength = 10, ntree=ntree)
   key <- toString(ntree)
@@ -98,7 +98,7 @@ for (ntree in c(350)) {
 # compare results
 results <- resamples(modellist)
 summary(results)
-dotplot(results)
+#dotplot(results)
 model_rf<-train(trainData[,predictors],trainData[,outcomeName],method='rf',trControl = train_ctrl,metric = 'Accuracy',tuneGrid = tunegrid,tuneLength = 10,ntree= 350)
 pred_rf<-predict.train(object=model_rf,trainData[,predictors],type="raw",metric='Accuracy')
 table(pred_rf)
@@ -126,6 +126,14 @@ spe_rf_ex <- rf_cnfMat_ex$byClass["Specificity"]
 ROC_rf_ex <- roc(predictor=as.numeric(pred_rf_ex),
                  response=Exdata$Label,
                  levels=rev(levels(Exdata$Label)))
+s <- paste("",acc_rf_ex,sep=',')
+s <- paste(s,sen_rf_ex,sep=',')
+s <- paste(s,spe_rf_ex,sep=',')
+s <- paste(s,ROC_rf_ex$auc[1],sep=',')
+res <- paste(res,s,sep=',')
+res
+
+
 
 #SVM Linear-------------------------------------------------------------------------------
 model_svm<-train(trainData[,predictors],trainData[,outcomeName],method='svmLinear2',trControl = train_ctrl,metric = 'ROC')
@@ -380,5 +388,6 @@ res
 #write results to csv
 
 fp = file(outputCsv)
+
 write(res,fp)
 close(fp)
